@@ -142,7 +142,6 @@ export default function NewListing({ features }: { features: string }) {
                 Upload files
                 <VisuallyHiddenInput
                     type="file"
-                    onChange={(event) => setForm({ ...form, files: [...(form.files ?? []), ...(event.target.files ?? [])] })}
                     multiple
                 />
             </Button>
