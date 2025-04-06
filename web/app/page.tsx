@@ -1,9 +1,26 @@
 'use client'
 import Filters from "./components/filters";
 import RentalCard from "./components/rentalCard";
-import {APIProvider, Map, MapCameraChangedEvent} from '@vis.gl/react-google-maps';
+import {APIProvider, Map, MapCameraChangedEvent, Marker} from '@vis.gl/react-google-maps';
+
+
+const addresses = [
+  {
+    street: "1141 NW 26th Street",
+    city: "Corvallis",
+    state: "OR",
+    zip: "97330"
+  },
+  {
+    street: "2305 NW Monroe Ave",
+    city: "Corvallis",
+    state: "OR",
+    zip: "97330"
+  }
+]
 
 export default function Home() {
+  
   return (
     <div>
       <Filters />
@@ -18,7 +35,12 @@ export default function Home() {
                 console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
               }
               >
-            {/* <PoiMarkers pois={locations} /> */}
+                <Marker
+                  position={{ lat: 44.578994, lng: -123.274673 }}
+                />
+                <Marker
+                  position={{ lat: 44.579995, lng: -123.274673 }}
+                />
             </Map>
             <h1>Hello</h1>
           </APIProvider>
