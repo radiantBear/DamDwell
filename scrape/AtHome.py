@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
+import my_database
 
 def get_all_listings(url, base_url):
     # Set up the Selenium WebDriver with options
@@ -21,7 +22,7 @@ def get_all_listings(url, base_url):
     driver.get(url)
     
     # Wait for the page to load fully (adjust the sleep time if necessary)
-    time.sleep(3)
+    time.sleep(1)
     
     # Get the page content after it's rendered
     soup = BeautifulSoup(driver.page_source, "html.parser")
@@ -66,25 +67,39 @@ def get_all_listings(url, base_url):
     driver.quit()
 
 def scrape_data(url):
+    # Set up Chrome options
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')  # Run in headless mode (no browser window)
+    
+    # Run in headless mode (no browser window)
+    options.add_argument('--headless')  
+    
+    # Disable GPU to avoid GPU-related issues
+    options.add_argument('--disable-gpu')
+    
+    # Disable GPU hardware acceleration (use software rendering)
+    options.add_argument('--disable-software-rasterizer')
     
     # Add a User-Agent to make the request look like it's from a regular browser
     options.add_argument('User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
     
+    # Optionally, disable browser sandbox if running in a restricted environment (e.g., containers)
+    options.add_argument('--no-sandbox')
+
     # Use WebDriverManager to handle ChromeDriver setup
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     
     # Open the URL
     driver.get(url)
     
-    # Wait for the page to load fully (adjust the sleep time if necessary)
-    time.sleep(3)
-    
+    # Wait for the page to load fully (adjust sleep time if necessary)
+    time.sleep(1)
+
     # Get the page content after it's rendered
     soup = BeautifulSoup(driver.page_source, "html.parser")
 
     rent = soup.find('div', class_='rent-info').get_text() if soup.find('div', class_='rent-info') else 'N/A'
+    rent = rent.replace(" ", "").replace("$", "").replace(",", "")
+
     print(rent )
     if rent == "-":
         return 
@@ -98,6 +113,17 @@ def scrape_data(url):
     square_feet = square_feet_element.get_text() if square_feet_element else "N/A"    
     print(square_feet)
 
+    my_database.insert_listing(rent, address, 0, 0, bath_rooms + bed_rooms + square_feet, '2025-04-05', '1970-01-01')
+    # amenities = set()
+    # utilities_included = set()
+    # appliances_included = set()
+    # included = soup.find_all('ul', class_= 'detail-title')
+    
+    # for item in included:
+    #     if item.get_text() != "Pet Policy":
+    #         h
+
+
 
 
 # Example usage:
@@ -105,6 +131,7 @@ url = "https://www.athomepm.net/availability?city=Corvallis"
 base_url = "https://www.athomepm.net/listings"
 listings = get_all_listings(url, base_url)
 
+i = 0
 for listing in listings:
     print(listing)
     scrape_data(listing)
