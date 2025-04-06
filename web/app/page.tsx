@@ -1,4 +1,5 @@
 'use client'
+import React, { useState, useEffect } from 'react';
 import Filters from "./components/filters";
 import RentalCard from "./components/rentalCard";
 import {APIProvider, Map, MapCameraChangedEvent, Marker} from '@vis.gl/react-google-maps';
@@ -6,7 +7,7 @@ import {APIProvider, Map, MapCameraChangedEvent, Marker} from '@vis.gl/react-goo
 
 const addresses = [
   {
-    street: "1141 NW 26th Street",
+    street: "1141+NW+26th+Street",
     city: "Corvallis",
     state: "OR",
     zip: "97330"
@@ -20,7 +21,25 @@ const addresses = [
 ]
 
 export default function Home() {
-  
+  const [markers, setMarkers] = useState<{position: {lat: number, lng: number}}[]>([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      addresses.forEach(async (address) => {
+        var response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address.street},+${address.city},+${address.state},${address.zip}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`)
+        var data = await response.json()
+        console.log(data)
+        setMarkers(prevMarkers => [...prevMarkers, {
+          position: {
+            lat: data.results[0].geometry.location.lat,
+            lng: data.results[0].geometry.location.lng
+          }
+        }])
+      })
+    }
+    fetchData()
+  }, [])
+
   return (
     <div>
       <Filters />
@@ -35,12 +54,12 @@ export default function Home() {
                 console.log('camera changed:', ev.detail.center, 'zoom:', ev.detail.zoom)
               }
               >
-                <Marker
-                  position={{ lat: 44.578994, lng: -123.274673 }}
-                />
-                <Marker
-                  position={{ lat: 44.579995, lng: -123.274673 }}
-                />
+
+                {markers.map((marker) => (
+                  <Marker
+                    position={marker.position}
+                  />
+                ))}
             </Map>
             <h1>Hello</h1>
           </APIProvider>
