@@ -7,7 +7,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 export default function RentalCard({ image, rent, address, availableDate }: {image: string, rent: number, address: string, availableDate: string}) {
 
     return (
-        <Card sx={{ width: 300, borderRadius: 2, boxShadow: 3 }}>
+        <Card sx={{ width: '100%', borderRadius: 2, boxShadow: 3, boxSizing: 'border-box' }}>
             <CardMedia
                 component="img"
                 height="180"

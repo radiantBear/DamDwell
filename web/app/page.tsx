@@ -24,7 +24,7 @@ export default function Home() {
           </APIProvider>
         </div>
 
-        <div className="w-1/2 h-150 bg-amber-800 p-2 flex flex-wrap gap-2">
+        <Box width="33%" maxWidth={345} gap={2} margin={2} display="flex" flexDirection="column" >
           <RentalCard />
           <RentalCard />
           <RentalCard />
@@ -32,7 +32,7 @@ export default function Home() {
           <RentalCard />
           <RentalCard />
           <RentalCard />
-        </div>
+        </Box>
 
       </div>
     </div>
