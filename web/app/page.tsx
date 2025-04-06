@@ -1,8 +1,5 @@
-export default function Home() {
-  if (typeof window !== 'undefined') {
-    // Redirect to static HTML
-    window.location.href = '/index.html';
-  }
+import { redirect } from 'next/navigation'
 
-  return null; // This will render nothing because we are redirecting
+export default function Home() {
+    redirect('/index.html') 
 }
