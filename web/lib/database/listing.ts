@@ -1,7 +1,7 @@
 'use server';
 
-import Listing from '@/lib/model/listing';
-import { execute } from './db_connect';
+import Listing, { DB_Listing, extractListingFromRow } from '@/lib/model/listing';
+import { execute, query } from './db_connect';
 
 export async function createListing(list: Listing): Promise<boolean> {
     const sql = `
@@ -28,4 +28,16 @@ export async function createListing(list: Listing): Promise<boolean> {
     const result = await execute(sql, list);
 
     return !!result;
+}
+
+
+export async function getListings(): Promise<Listing[] | false> {
+    const sql = 'SELECT * FROM \`listing\`;';
+
+    const result = await query<DB_Listing>(sql, {});
+
+    if (!result) 
+        return false;
+
+    return result.map(extractListingFromRow);
 }
