@@ -38,7 +38,7 @@ export default async function Home() {
           ))}
         </Box>
       </div>
-      <Fab component={Link} color="primary" aria-label="add" href="/listing/new" sx={{position: 'absolute', bottom: 16, left: 16}}> <AddIcon /> </Fab>
+      <Fab component={Link} color="primary" aria-label="add" href="/listing/new" sx={{position: 'fixed', bottom: 16, left: 16}}> <AddIcon /> </Fab>
     </div>
   );
 }
