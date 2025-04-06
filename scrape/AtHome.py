@@ -1,3 +1,4 @@
+from urllib.parse import urljoin
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -5,7 +6,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
 
-def get_all_listings(url):
+def get_all_listings(url, base_url):
     # Set up the Selenium WebDriver with options
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Run in headless mode (no browser window)
@@ -27,30 +28,52 @@ def get_all_listings(url):
 
     first_body = soup.find('div', id="dmFirstContainer")
     if first_body:
+        print("first-body found")
         container = first_body.find('div', id='1586610897')
         if container:
             print("Container found.")
-            listing_tile = container.find_all('div', class_='listings-container')  # Use find_all() for multiple listings
-            
-            if listing_tile:
-                return listing_tile  # Return the list of found listings
+            listings_container = container.find('div', class_='listings-container')
+            if listings_container:
+                print("Listing-container found")
+                all_listings = listings_container.find('div', class_='all-listings')
+                if all_listings:
+                    print("all listing found")
+                    listing_section = all_listings.find('section', class_= 'listing-section')
+                    if listing_section:
+                        print("listing section found")
+                        listing_item = listing_section.find_all('div', class_="listing-item")
+                        if listing_item: 
+                            print("List item found")
+                            links = set()
+                            for item in listing_item:
+                                anchor_tag = item.find('a', class_='slider-link')
+                                href = anchor_tag.get('href')
+                                links.add(urljoin(base_url, href))
+                            return links
+
+                    else: 
+                        return []
+                else:
+                    return []
             else:
-                print("No listings found.")
                 return []
         else:
-            print("No listing container found inside the first body.")
             return []
     else:
-        print("No body with id='dmFirstContainer' found.")
         return []
 
     # Close the browser when done
     driver.quit()
 
+
+
 # Example usage:
 url = "https://www.athomepm.net/availability?city=Corvallis"
-listings = get_all_listings(url)
+base_url = "https://www.athomepm.net/listings"
+listings = get_all_listings(url, base_url)
 
 if listings:
     for listing in listings:
-        print(listing.prettify())  # Print each listing's prettified HTML
+        scrape_data(listing)
+        break
+        
