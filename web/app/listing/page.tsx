@@ -1,8 +1,8 @@
 import { Box, Fab } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import Filters from "./components/filters";
-import RentalCard from "./components/rentalCard";
-import Map from "./components/map";
+import Filters from "../components/filters";
+import RentalCard from "../components/rentalCard";
+import Map from "../components/map";
 import { getListings } from "@/lib/database/listing";
 import Link from "next/link";
 
