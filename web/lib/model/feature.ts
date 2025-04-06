@@ -36,5 +36,4 @@ export function extractFeatureFromRow(row: DB_Feature): Feature {
     );
   
     return feature;
-}
-  
+} 

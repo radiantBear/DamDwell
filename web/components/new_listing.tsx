@@ -10,6 +10,7 @@ import {
   Button,
   Typography,
   InputAdornment,
+  styled,
 } from '@mui/material';
 import Feature from '@/lib/model/feature';
 import { CloudUploadIcon } from 'lucide-react';
@@ -141,7 +142,6 @@ export default function NewListing({ features }: { features: string }) {
                 Upload files
                 <VisuallyHiddenInput
                     type="file"
-                    onChange={(event) => setForm({ ...form, files: [...(form.files ?? []), ...(event.target.files ?? [])] })}
                     multiple
                 />
             </Button>
