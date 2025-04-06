@@ -12,6 +12,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import Feature from '@/lib/model/feature';
+import { CloudUploadIcon } from 'lucide-react';
 
 interface RentalFormData {
     cost: string;
@@ -20,7 +21,19 @@ interface RentalFormData {
     availabilityEnd: Date | null;
     description: string;
     features: string[];
-  }
+}
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 export default function NewListing({ features }: { features: string }) {
     const availableFeatures: Feature[] = JSON.parse(features);
@@ -123,6 +136,15 @@ export default function NewListing({ features }: { features: string }) {
                     />
                 ))}
             </FormGroup>
+
+            <Button component="label" role={undefined} variant="contained" tabIndex={-1} startIcon={<CloudUploadIcon />}>
+                Upload files
+                <VisuallyHiddenInput
+                    type="file"
+                    onChange={(event) => setForm({ ...form, files: [...(form.files ?? []), ...(event.target.files ?? [])] })}
+                    multiple
+                />
+            </Button>
 
             <Button variant="contained" color="primary" type="submit">
                 Submit

@@ -1,12 +1,43 @@
-import Image from "next/image";
+import React from 'react';
+import { Card, CardMedia, CardContent, Typography, Box, Tooltip } from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
-export default function RentalCard() {
-  return (
-    <div className="w-50 border-2 border-gray-300 rounded-md p-2">
-        <Image src="/rental1.jpg" alt="Rental Card" width={200} height={100} />
-        <p>Rent: $1000</p>
-        <p>123 Main St</p>
-        <p>Available: 4/15/2025</p>
-    </div>
-  );
-}
+export default function RentalCard({ image, rent, address, availableDate }: {image: string, rent: number, address: string, availableDate: string}) {
+
+    return (
+        <Card sx={{ width: '100%', borderRadius: 2, boxShadow: 3, boxSizing: 'border-box' }}>
+            <CardMedia
+                component="img"
+                height="180"
+                image={image}
+                alt="Rental property"
+            />
+            <CardContent>
+                <Box display="flex" justifyContent="space-between" mb={1}>
+                    <Tooltip title="Monthly Rent" arrow className='w-fit'>
+                        <Box display="flex" alignItems="center" mb={1}>
+                            <AttachMoneyIcon color="primary" sx={{ mr: 1 }} />
+                            <Typography variant="body1">{rent ?? '--'}</Typography>
+                        </Box>
+                    </Tooltip>
+
+                    <Tooltip title="Earliest Start Date" arrow className='w-fit'>
+                        <Box display="flex" alignItems="center">
+                            <CalendarTodayIcon color="success" sx={{ mr: 1 }} />
+                            <Typography variant="body2">{availableDate ?? '--'}</Typography>
+                        </Box>
+                    </Tooltip>
+                </Box>
+
+                <Tooltip title="Address" arrow className='w-fit'>
+                    <Box display="flex" alignItems="center" mb={1}>
+                        <LocationOnIcon color="action" sx={{ mr: 1 }} />
+                        <Typography variant="body2">{address ?? '--'}</Typography>
+                    </Box>
+                </Tooltip>
+            </CardContent>
+        </Card>
+    );
+};
