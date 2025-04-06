@@ -74,7 +74,6 @@ export default function Home() {
           <RentalCard />
           <RentalCard />
         </div>
-
       </div>
     </div>
   );
