@@ -1,8 +1,10 @@
-import { Box } from "@mui/material";
+import { Box, Fab } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import Filters from "./components/filters";
 import RentalCard from "./components/rentalCard";
 import Map from "./components/map";
 import { getListings } from "@/lib/database/listing";
+import Link from "next/link";
 
 
 export default async function Home() {
@@ -36,6 +38,7 @@ export default async function Home() {
           ))}
         </Box>
       </div>
+      <Fab component={Link} color="primary" aria-label="add" href="/listing/new" sx={{position: 'absolute', bottom: 16, left: 16}}> <AddIcon /> </Fab>
     </div>
   );
 }
