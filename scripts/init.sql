@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS listing (
     description TEXT,
     availability_start DATE NOT NULL,
     availability_end DATE NOT NULL,
+    image VARCHAR(255) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
