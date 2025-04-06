@@ -65,6 +65,39 @@ def get_all_listings(url, base_url):
     # Close the browser when done
     driver.quit()
 
+def scrape_data(url):
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')  # Run in headless mode (no browser window)
+    
+    # Add a User-Agent to make the request look like it's from a regular browser
+    options.add_argument('User-Agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
+    
+    # Use WebDriverManager to handle ChromeDriver setup
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    
+    # Open the URL
+    driver.get(url)
+    
+    # Wait for the page to load fully (adjust the sleep time if necessary)
+    time.sleep(3)
+    
+    # Get the page content after it's rendered
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+
+    rent = soup.find('div', class_='rent-info').get_text() if soup.find('div', class_='rent-info') else 'N/A'
+    print(rent )
+    if rent == "-":
+        return 
+    address = soup.find('h1', id='1531620706').get_text()
+    print(address)
+    bath_rooms = soup.find('div', class_='feature beds').get_text() if soup.find('div', class_='feature beds').get_text() else 'N/A'
+    print(bath_rooms)
+    bed_rooms = soup.find('div', class_='feature baths').get_text() if soup.find('div', class_='feature baths').get_text() else 'N/A'
+    print(bed_rooms)
+    square_feet_element = soup.find('div', class_='feature sqft')
+    square_feet = square_feet_element.get_text() if square_feet_element else "N/A"    
+    print(square_feet)
+
 
 
 # Example usage:
@@ -72,8 +105,6 @@ url = "https://www.athomepm.net/availability?city=Corvallis"
 base_url = "https://www.athomepm.net/listings"
 listings = get_all_listings(url, base_url)
 
-if listings:
-    for listing in listings:
-        scrape_data(listing)
-        break
-        
+for listing in listings:
+    print(listing)
+    scrape_data(listing)
