@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS scraped_listing (
     campus_bike_time TIME NOT NULL,
     description TEXT,
     availability_start DATE NOT NULL,
-    availability_end DATE NOT NULL,
+    availability_end DATE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
